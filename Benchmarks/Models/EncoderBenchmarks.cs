@@ -1,5 +1,4 @@
 using BenchmarkDotNet.Attributes;
-using Client.Encoder;
 using Client.Models;
 
 namespace Benchmarks.Models;
@@ -32,8 +31,8 @@ public class EncoderBenchmark
   void SetUpEncoder()
     => _packet = new()
         {
-          Id = (uint)StringCount,
-          Type = (uint)StringCount,
+          Id = StringCount,
+          Type = StringCount,
           Payload = new string('i', StringCount)
         };
 

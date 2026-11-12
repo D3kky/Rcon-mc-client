@@ -12,7 +12,7 @@ public class EncoderTests
   [InlineData(new byte[] { 0b1101, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b10, 0b0, 0b0, 0b0, 0b01101100, 0b01101101, 0b01100001, 0b01101111, 0b0 }, 3, 2, "lmao")]
   [InlineData(new byte[] { 0b1110, 0b0, 0b0, 0b0, 0b1100, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b01010101, 0b01110000, 0b01110000, 0b01100101, 0b01110010, 0b0 }, 12, 3, "Upper")]
   [InlineData(new byte[] { 0b1110, 0b0, 0b0, 0b0, 0b1100, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b00110001, 0b00110010, 0b00110011, 0b00110100, 0b00110101, 0b0 }, 12, 3, "12345")]
-  public void Encode_Encodes_ReturnsCorrectPacket(byte[] bytes, uint id, uint type, string payload)
+  public void Encode_Encodes_ReturnsCorrectPacket(byte[] bytes, int id, int type, string payload)
   {
     Packet expected = new()
     {
@@ -31,7 +31,7 @@ public class EncoderTests
   [InlineData(3, 2, "lmao", new byte[] { 0b1101, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b10, 0b0, 0b0, 0b0, 0b01101100, 0b01101101, 0b01100001, 0b01101111, 0b0 })]
   [InlineData(12, 3, "Upper", new byte[] { 0b1110, 0b0, 0b0, 0b0, 0b1100, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b01010101, 0b01110000, 0b01110000, 0b01100101, 0b01110010, 0b0 })]
   [InlineData(12, 3, "12345", new byte[] { 0b1110, 0b0, 0b0, 0b0, 0b1100, 0b0, 0b0, 0b0, 0b11, 0b0, 0b0, 0b0, 0b00110001, 0b00110010, 0b00110011, 0b00110100, 0b00110101, 0b0 })]
-  public void Decode_Decodes_ReturnsCorrectByteArray(uint id, uint type, string payload, byte[] expectedBytes)
+  public void Decode_Decodes_ReturnsCorrectByteArray(int id, int type, string payload, byte[] expectedBytes)
   {
     Packet packet = new()
     {
