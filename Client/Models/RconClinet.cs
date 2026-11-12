@@ -7,7 +7,7 @@ namespace Client.Models;
 
 public sealed class RconClient : IRconClient
 {
-  private int _rconDefaultPort = 25575;
+  private const int _rconDefaultPort = 25575;
   private int _packetId = 0;
 
   private readonly string _password;
