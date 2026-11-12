@@ -63,7 +63,7 @@ public sealed class RconClient : IRconClient
     _stream.Write(_encoder.Encode(connect));
 
     Span<byte> buffer = stackalloc byte[EmptySize];
-    _stream.Read(buffer);
+    _ = _stream.Read(buffer);
 
     var res = _encoder.Decode(buffer);
     if (res.Id == -1) throw new Exception("Connecting to the server failed, wrong password");
