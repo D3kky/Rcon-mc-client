@@ -1,0 +1,85 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 3 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/" /p:OutDir="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0/" /p:OutputPath="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0/" /p:PublishDir="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/publish/" in /home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1
+// command took 0.75 sec and exited with 0
+// start dotnet  build -c Release --no-restore --nodeReuse:false /p:UseSharedCompilation=false /p:Deterministic=true /p:Optimize=true /p:ArtifactsPath="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/" /p:OutDir="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0/" /p:OutputPath="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0/" /p:PublishDir="/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/publish/" --output "/home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0/" in /home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1
+// command took 5.84 sec and exited with 0
+// ***** Done, took 00:00:06 (6.63 sec)   *****
+// Found 3 benchmarks:
+//   EncoderBenchmark.Encode: DefaultJob [StringCount=10]
+//   EncoderBenchmark.Encode: DefaultJob [StringCount=100]
+//   EncoderBenchmark.Encode: DefaultJob [StringCount=1000]
+
+// **************************
+// Benchmark: EncoderBenchmark.Encode: DefaultJob [StringCount=10]
+// *** Execute ***
+// Launch: 1 / 1
+// Execute: dotnet Benchmarks-DefaultJob-1.dll --anonymousPipes 122 123 --benchmarkName "Benchmarks.Models.EncoderBenchmark.Encode(StringCount: 10)" --job Default --benchmarkId 0 in /home/dekky/repos/rcon-mc/Benchmarks/bin/Release/net10.0/Benchmarks-DefaultJob-1/bin/Release/net10.0
+// BeforeAnythingElse
+
+// Benchmark Process Environment Information:
+// BenchmarkDotNet v0.15.8
+// Runtime=.NET 10.0.14 (10.0.14, 42.42.42.42424), X64 RyuJIT x86-64-v3
+// GC=Concurrent Workstation
+// HardwareIntrinsics=AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE,AVX,SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT,X86Base+SSE+SSE2,AES+PCLMUL,AvxVnni,SERIALIZE VectorSize=256
+// Job: DefaultJob
+
+OverheadJitting  1: 1 op, 164911.00 ns, 164.9110 us/op
+WorkloadJitting  1: 1 op, 1623558.00 ns, 1.6236 ms/op
+
+OverheadJitting  2: 16 op, 190210.00 ns, 11.8881 us/op
+WorkloadJitting  2: 16 op, 251207.00 ns, 15.7004 us/op
+
+WorkloadPilot    1: 16 op, 22340.00 ns, 1.3963 us/op
+WorkloadPilot    2: 32 op, 28134.00 ns, 879.1875 ns/op
+WorkloadPilot    3: 64 op, 52050.00 ns, 813.2813 ns/op
+WorkloadPilot    4: 128 op, 90521.00 ns, 707.1953 ns/op
+WorkloadPilot    5: 256 op, 170768.00 ns, 667.0625 ns/op
+WorkloadPilot    6: 512 op, 324223.00 ns, 633.2480 ns/op
+WorkloadPilot    7: 1024 op, 616836.00 ns, 602.3789 ns/op
+WorkloadPilot    8: 2048 op, 1326549.00 ns, 647.7290 ns/op
+WorkloadPilot    9: 4096 op, 2766185.00 ns, 675.3381 ns/op
+WorkloadPilot   10: 8192 op, 5578043.00 ns, 680.9135 ns/op
+WorkloadPilot   11: 16384 op, 10983546.00 ns, 670.3824 ns/op
+WorkloadPilot   12: 32768 op, 21007513.00 ns, 641.0984 ns/op
+WorkloadPilot   13: 65536 op, 35861648.00 ns, 547.2053 ns/op
+WorkloadPilot   14: 131072 op, 57251199.00 ns, 436.7920 ns/op
+WorkloadPilot   15: 262144 op, 25531171.00 ns, 97.3937 ns/op
+WorkloadPilot   16: 524288 op, 49093864.00 ns, 93.6391 ns/op
+WorkloadPilot   17: 1048576 op, 95422261.00 ns, 91.0018 ns/op
+WorkloadPilot   18: 2097152 op, 190325826.00 ns, 90.7544 ns/op
+WorkloadPilot   19: 4194304 op, 377278901.00 ns, 89.9503 ns/op
+WorkloadPilot   20: 8388608 op, 768729787.00 ns, 91.6397 ns/op
+
+OverheadWarmup   1: 8388608 op, 20108060.00 ns, 2.3971 ns/op
+OverheadWarmup   2: 8388608 op, 19897526.00 ns, 2.3720 ns/op
+OverheadWarmup   3: 8388608 op, 20907131.00 ns, 2.4923 ns/op
+OverheadWarmup   4: 8388608 op, 20072257.00 ns, 2.3928 ns/op
+OverheadWarmup   5: 8388608 op, 20064667.00 ns, 2.3919 ns/op
+OverheadWarmup   6: 8388608 op, 20011174.00 ns, 2.3855 ns/op
+OverheadWarmup   7: 8388608 op, 19772172.00 ns, 2.3570 ns/op
+OverheadWarmup   8: 8388608 op, 19814284.00 ns, 2.3620 ns/op
+OverheadWarmup   9: 8388608 op, 19855816.00 ns, 2.3670 ns/op
+OverheadWarmup  10: 8388608 op, 18299312.00 ns, 2.1814 ns/op
+
+OverheadActual   1: 8388608 op, 12796318.00 ns, 1.5254 ns/op
+OverheadActual   2: 8388608 op, 12868378.00 ns, 1.5340 ns/op
+OverheadActual   3: 8388608 op, 12864777.00 ns, 1.5336 ns/op
+OverheadActual   4: 8388608 op, 12916981.00 ns, 1.5398 ns/op
+OverheadActual   5: 8388608 op, 12945114.00 ns, 1.5432 ns/op
+OverheadActual   6: 8388608 op, 13211057.00 ns, 1.5749 ns/op
+OverheadActual   7: 8388608 op, 13210463.00 ns, 1.5748 ns/op
+OverheadActual   8: 8388608 op, 13099336.00 ns, 1.5616 ns/op
+OverheadActual   9: 8388608 op, 13186522.00 ns, 1.5720 ns/op
+OverheadActual  10: 8388608 op, 13135974.00 ns, 1.5659 ns/op
+OverheadActual  11: 8388608 op, 13163729.00 ns, 1.5692 ns/op
+OverheadActual  12: 8388608 op, 13364433.00 ns, 1.5932 ns/op
+OverheadActual  13: 8388608 op, 12969354.00 ns, 1.5461 ns/op
+OverheadActual  14: 8388608 op, 13038523.00 ns, 1.5543 ns/op
+OverheadActual  15: 8388608 op, 12955919.00 ns, 1.5445 ns/op
+
+WorkloadWarmup   1: 8388608 op, 770568082.00 ns, 91.8589 ns/op
+WorkloadWarmup   2: 8388608 op, 819800777.00 ns, 97.7279 ns/op
+WorkloadWarmup   3: 8388608 op, 754470576.00 ns, 89.9399 ns/op

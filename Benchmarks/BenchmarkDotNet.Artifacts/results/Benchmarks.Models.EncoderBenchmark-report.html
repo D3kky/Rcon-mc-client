@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Benchmarks.Models.EncoderBenchmark-20261111-201348</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.8, Linux CachyOS
+12th Gen Intel Core i7-12700KF 0.80GHz, 1 CPU, 20 logical and 12 physical cores
+.NET SDK 10.0.114
+  [Host]     : .NET 10.0.14 (10.0.14, 42.42.42.42424), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 10.0.14 (10.0.14, 42.42.42.42424), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>StringCount</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Gen0</th><th>Gen1</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>Encode</td><td>10</td><td>8.542 ns</td><td>0.1930 ns</td><td>0.1805 ns</td><td>8.528 ns</td><td>0.0037</td><td>-</td><td>48 B</td>
+</tr><tr><td>Decode</td><td>10</td><td>8.101 ns</td><td>0.1825 ns</td><td>0.1875 ns</td><td>8.018 ns</td><td>0.0037</td><td>-</td><td>48 B</td>
+</tr><tr><td>Encode</td><td>100</td><td>15.386 ns</td><td>0.2406 ns</td><td>0.2133 ns</td><td>15.317 ns</td><td>0.0110</td><td>-</td><td>144 B</td>
+</tr><tr><td>Decode</td><td>100</td><td>19.616 ns</td><td>0.4194 ns</td><td>1.0049 ns</td><td>19.267 ns</td><td>0.0171</td><td>-</td><td>224 B</td>
+</tr><tr><td>Encode</td><td>1000</td><td>82.719 ns</td><td>1.6814 ns</td><td>2.5167 ns</td><td>81.832 ns</td><td>0.0795</td><td>-</td><td>1040 B</td>
+</tr><tr><td>Decode</td><td>1000</td><td>127.853 ns</td><td>2.5224 ns</td><td>4.6123 ns</td><td>126.165 ns</td><td>0.1547</td><td>0.0010</td><td>2024 B</td>
+</tr></tbody></table>
+</body>
+</html>
