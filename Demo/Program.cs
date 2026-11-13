@@ -4,10 +4,15 @@ using Client.Models;
 
 var encoder = new Encoder();
 
+var localPass = "lmaolol123";
 var ip = IPAddress.Loopback.ToString();
-var client = new RconClient(encoder, ip, "lmaolol123");
+if (true)
+{
+  using var client = new RconClient(encoder, IPAddress.Loopback.ToString(), localPass);
 
-var res = client.SendCommand("whitelist list");
-Console.WriteLine(res);
+  var res = client.SendCommand("time set day");
+
+  Console.WriteLine(res);
+}
 
 Console.ReadLine();
