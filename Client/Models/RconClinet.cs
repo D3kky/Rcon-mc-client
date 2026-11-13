@@ -5,7 +5,7 @@ using static Client.Constants.PacketSizes;
 
 namespace Client.Models;
 
-public sealed class RconClient : IRconClient
+public sealed class RconClient : IRconClient, IDisposable
 {
   private const int _rconDefaultPort = 25575;
   private int _packetId = 0;
@@ -69,4 +69,7 @@ public sealed class RconClient : IRconClient
     if (res.Id == -1) throw new Exception("Connecting to the server failed, wrong password");
     if (res.Id != connect.Id) throw new Exception("Resposne didn't match original request");    
   }
+
+  public void Dispose()
+    => _tcpClient.Dispose();
 }
