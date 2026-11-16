@@ -1,18 +1,20 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Net;
+﻿using System.Net;
 using Client.Models;
 
 var encoder = new Encoder();
 
 var localPass = "lmaolol123";
 var ip = IPAddress.Loopback.ToString();
-if (true)
+
+var client = await RconClient.CreateAsync(encoder, ip, localPass);
+
+while (true)
 {
-  using var client = new RconClient(encoder, IPAddress.Loopback.ToString(), localPass);
+  var userInput = Console.ReadLine();
+  if (userInput == "q") return;
 
-  var res = client.SendCommand("time set day");
-
-  Console.WriteLine(res);
+  _ = HandleCommandAsync(userInput ?? string.Empty);
 }
 
-Console.ReadLine();
+async Task HandleCommandAsync(string command)
+  => Console.WriteLine(await client.SendCommandAsync(command));

@@ -33,9 +33,9 @@ public sealed class RconClient : IRconClient, IDisposable
   public static async Task<RconClient> CreateAsync(IEncoder encoder, string ip, int port, string password)
   {
     var client = new TcpClient();
-    var stream = client.GetStream();
-
     await client.ConnectAsync(ip, port);
+
+    var stream = client.GetStream();
 
     await stream.WriteAsync(encoder.Encode(new() { Id = 0, Type = (int)RequestTypes.AUTH, Payload = password }));
     var buffer = new byte[EmptySize];
