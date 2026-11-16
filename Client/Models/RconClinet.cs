@@ -49,17 +49,23 @@ public sealed class RconClient : IRconClient, IDisposable
 
   public string SendCommand(string command)
   {
-    var id = Interlocked.Increment(ref _packetId);
+    _messageSemaphore.Wait();
 
-    _stream.Write(_encoder.Encode(new() { Id = id, Type = (int)RequestTypes.COMMAND, Payload = command }));
-    
-    Span<byte> buffer = stackalloc byte[MaxPacketSize];
-    var bytesWritten = _stream.Read(buffer);
-    
-    var packet = _encoder.Decode(buffer[0..bytesWritten]);
-    if (id != packet.Id) throw new Exception("Response didn't return original request");
+    try
+    {
+      _stream.Write(_encoder.Encode(new() { Id = _packetId++, Type = (int)RequestTypes.COMMAND, Payload = command }));
 
-    return packet.Payload;
+      Span<byte> buffer = stackalloc byte[MaxPacketSize];
+      var bytesWritten = _stream.Read(buffer);
+
+      var packet = _encoder.Decode(buffer[0..bytesWritten]);
+
+      return packet.Payload;
+    }
+    finally
+    {
+      _messageSemaphore.Release();
+    }
   }
 
   public void Dispose()
