@@ -89,6 +89,9 @@ public sealed class RconClient : IRconClient, IDisposable
   }
 
   public void Dispose()
-  => _tcpClient.Dispose();
+  {
+    _tcpClient.Dispose();
+    _messageSemaphore.Dispose();
+  }
 
 }
