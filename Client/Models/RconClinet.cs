@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Net.Sockets;
 using Client.Enums;
 using Client.Intefaces;
@@ -68,6 +69,26 @@ public sealed class RconClient : IRconClient, IDisposable
     }
   }
 
+  public async Task<string> SendCommandAsync(string command)
+  {
+    await _messageSemaphore.WaitAsync();
+    var buffer = ArrayPool<byte>.Shared.Rent(MaxPacketSize);
+
+    try
+    {
+      await _stream.WriteAsync(_encoder.Encode(new() { Id = _packetId++, Type = (int)RequestTypes.COMMAND, Payload = command }));
+      await _stream.ReadAsync(buffer);
+
+      return _encoder.Decode(buffer).Payload;
+    }
+    finally
+    {
+      _messageSemaphore.Release();
+      ArrayPool<byte>.Shared.Return(buffer);
+    }
+  }
+
   public void Dispose()
-    => _tcpClient.Dispose();
+  => _tcpClient.Dispose();
+
 }
