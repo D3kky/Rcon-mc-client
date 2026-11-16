@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Net.Sockets;
 using Client.Enums;
 using Client.Intefaces;
@@ -10,66 +11,87 @@ public sealed class RconClient : IRconClient, IDisposable
   private const int _rconDefaultPort = 25575;
   private int _packetId = 0;
 
-  private readonly string _password;
   private readonly IEncoder _encoder;
   private readonly TcpClient _tcpClient;
   private readonly NetworkStream _stream;
 
-  public RconClient(IEncoder encoder, string ip, int port, string password)
-  {
-    _encoder = encoder;
-    _tcpClient = new(ip, port);
-    _stream = _tcpClient.GetStream();
-    _password = password;
+  // Hopefully goes away in the future, plan is to use system.io.channels
+  private readonly SemaphoreSlim _messageSemaphore;
 
-    Connect();
+  private RconClient(IEncoder encoder, TcpClient tcpClient)
+  {
+    _messageSemaphore = new(1, 1);
+
+    _encoder = encoder;
+    _tcpClient = tcpClient;
+    _stream = tcpClient.GetStream();
   }
 
-  // Default port
-  public RconClient(IEncoder encoder, string ip, string password)
-  {
-    _encoder = encoder;
-    _tcpClient = new(ip, _rconDefaultPort);
-    _stream = _tcpClient.GetStream();
-    _password = password;
+  public static async Task<RconClient> CreateAsync(IEncoder encoder, string ip, string password)
+    => await CreateAsync(encoder, ip, _rconDefaultPort, password);
 
-    Connect();
+  public static async Task<RconClient> CreateAsync(IEncoder encoder, string ip, int port, string password)
+  {
+    var client = new TcpClient();
+    await client.ConnectAsync(ip, port);
+
+    var stream = client.GetStream();
+
+    await stream.WriteAsync(encoder.Encode(new() { Id = 0, Type = (int)RequestTypes.AUTH, Payload = password }));
+    var buffer = new byte[EmptySize];
+
+    _ = await stream.ReadAsync(buffer);
+    var res = encoder.Decode(buffer);
+
+    if (res.Id != 0) throw new ArgumentException("Connection failed, password wrong");
+
+    return new(encoder, client);
   }
 
   public string SendCommand(string command)
   {
-    var id = Interlocked.Increment(ref _packetId);
+    _messageSemaphore.Wait();
 
-    _stream.Write(_encoder.Encode(new() { Id = id, Type = (int)RequestTypes.COMMAND, Payload = command }));
-    
-    Span<byte> buffer = stackalloc byte[MaxPacketSize];
-    var bytesWritten = _stream.Read(buffer);
-    
-    var packet = _encoder.Decode(buffer[0..bytesWritten]);
-    if (id != packet.Id) throw new Exception("Response didn't return original request");
+    try
+    {
+      _stream.Write(_encoder.Encode(new() { Id = _packetId++, Type = (int)RequestTypes.COMMAND, Payload = command }));
 
-    return packet.Payload;
+      Span<byte> buffer = stackalloc byte[MaxPacketSize];
+      var bytesWritten = _stream.Read(buffer);
+
+      var packet = _encoder.Decode(buffer[0..bytesWritten]);
+
+      return packet.Payload;
+    }
+    finally
+    {
+      _messageSemaphore.Release();
+    }
   }
 
-  private void Connect()
+  public async Task<string> SendCommandAsync(string command)
   {
-    var connect = new Packet()
+    await _messageSemaphore.WaitAsync();
+    var buffer = ArrayPool<byte>.Shared.Rent(MaxPacketSize);
+
+    try
     {
-      Id = 1,
-      Type = (int)RequestTypes.AUTH,
-      Payload = _password
-    };
+      await _stream.WriteAsync(_encoder.Encode(new() { Id = _packetId++, Type = (int)RequestTypes.COMMAND, Payload = command }));
+      _ = await _stream.ReadAsync(buffer, CancellationToken.None);
 
-    _stream.Write(_encoder.Encode(connect));
-
-    Span<byte> buffer = stackalloc byte[EmptySize];
-    _ = _stream.Read(buffer);
-
-    var res = _encoder.Decode(buffer);
-    if (res.Id == -1) throw new Exception("Connecting to the server failed, wrong password");
-    if (res.Id != connect.Id) throw new Exception("Resposne didn't match original request");    
+      return _encoder.Decode(buffer).Payload;
+    }
+    finally
+    {
+      _messageSemaphore.Release();
+      ArrayPool<byte>.Shared.Return(buffer);
+    }
   }
 
   public void Dispose()
-    => _tcpClient.Dispose();
+  {
+    _tcpClient.Dispose();
+    _messageSemaphore.Dispose();
+  }
+
 }
