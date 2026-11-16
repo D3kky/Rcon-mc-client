@@ -40,7 +40,7 @@ public sealed class RconClient : IRconClient, IDisposable
     await stream.WriteAsync(encoder.Encode(new() { Id = 0, Type = (int)RequestTypes.AUTH, Payload = password }));
     var buffer = new byte[EmptySize];
 
-    await stream.ReadAsync(buffer);
+    _ = await stream.ReadAsync(buffer);
     var res = encoder.Decode(buffer);
 
     if (res.Id != 0) throw new ArgumentException("Connection failed, password wrong");
@@ -77,7 +77,7 @@ public sealed class RconClient : IRconClient, IDisposable
     try
     {
       await _stream.WriteAsync(_encoder.Encode(new() { Id = _packetId++, Type = (int)RequestTypes.COMMAND, Payload = command }));
-      await _stream.ReadAsync(buffer);
+      _ = await _stream.ReadAsync(buffer, CancellationToken.None);
 
       return _encoder.Decode(buffer).Payload;
     }
